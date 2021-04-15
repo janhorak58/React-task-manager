@@ -3,22 +3,23 @@ import { useState } from 'react'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Tasks from './components/Tasks'
+import AddTask from './components/addTask'
 
 function App() {
-  const [tasks, setTasks] = useState([
-    {
-        id:1,
-        text: "Do something",
-        day: "today",
-        reminder: "true",
-    },
-    {
-        id:2,
-        text: "Do something else",
-        day: "tomorow",
-        reminder: "false",
-    },
-  ])
+  const [showAddTask, setShowAddTask] = useState(false)
+  const [tasks, setTasks] = useState([])
+  // Toggle add task form
+  const toggleShowAddTask = () => {
+    setShowAddTask(!showAddTask)
+    console.log({showAddTask});
+  }
+  // Add Task
+  const addTask = (task) => {
+    const id = Math.floor((Math.random()*1000000 + 1) / Math.random())
+
+    const newTask = {id, ...task}
+    setTasks([...tasks, newTask])
+  }
 
   // Delete a task
   const deleteTask = (id) => {
@@ -31,7 +32,8 @@ function App() {
   }
   return (
     <div className="container">
-        <Header title="hello"></Header>
+        <Header title="hello" onClickAdd = {toggleShowAddTask} showAddTask={showAddTask}></Header>
+        {showAddTask && <AddTask onAdd = {addTask}></AddTask>}
         <h1>Hello</h1> 
         {tasks.length > 0 ?  <Tasks  tasks = {tasks} onDelete={deleteTask} onToggle = {toggleReminder}></Tasks> : "You have no task to do."}
         <Footer></Footer>
